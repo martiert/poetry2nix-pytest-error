@@ -8,8 +8,6 @@
   };
 
   outputs = { self, nixpkgs, flake-utils, poetry2nix }:
-    let
-    in
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs {
@@ -17,7 +15,7 @@
           overlays = [ overlay ];
         };
         overlay = (final: prev: {
-          final.callPackage ./default.nix {
+          app = final.callPackage ./default.nix {
             poetry2nix = prev.poetry2nix;
           };
         });
@@ -25,7 +23,7 @@
         inherit overlay;
 
         packages = {
-          app = pkgs.app
+          app = pkgs.app.app;
         };
         defaultPackage = packages.app;
         checks = packages;
